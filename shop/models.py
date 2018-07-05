@@ -7,7 +7,7 @@ import pytz
 from datetime import datetime
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.utils.safestring import mark_safe
-
+from django.http import Http404
 
 def named_property(name):
     def wrap(fn):
@@ -109,9 +109,24 @@ class order(models.Model):
     def update(self, commit=True, meta=None):
         '결재내역 갱신'
         if self.imp_uid:
-            self.meta = meta or self.api.find(imp_uid=self.imp_uid)
+            #self.meta = meta or self.api.find(imp_uid=self.imp_uid)
+            try:
+                self.meta = meta or self.api.find(imp_uid=self.imp_uid)
+            except Iamport.HttpError:
+                raise Http404('Not found {}'.format(self.imp_uid))
             # merchant_uid는 반드시 매칭되어야 합니다.
             assert str(self.merchant_uid) == self.meta['merchant_uid']
             self.status = self.meta['status']
+        if commit:
+            self.save()
+
+    def cancel(self, reason=None, commit=True):
+        '결제내역 취소'
+        try:
+            meta = self.api.cancel(reason, imp_uid=self.imp_uid)
+            assert str(self.merchant_uid) == self.meta['merchant_uid']
+            self.update(commit=commit, meta=meta)
+        except Iamport.ResponseError as e:  # 취소시 오류 예외처리(이미 취소된 결제는 에러가 발생함)
+            self.update(commit=commit)
         if commit:
             self.save()
