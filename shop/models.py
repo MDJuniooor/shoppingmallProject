@@ -2,6 +2,8 @@ from uuid import uuid4 # create random uuid.
 from django.conf import settings
 from django.db import models
 from iamport import Iamport
+from jsonfield import JSONField
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     desc = models.TextField(blank=True)
@@ -20,6 +22,7 @@ class order(models.Model):
     amount = models.PositiveIntegerField(verbose_name='결제금액')
     merchant_uid = models.UUIDField(default=uuid4, editable=False)
     imp_uid = models.CharField(max_length=100, blank=True)
+    meta = JSONField(blank=True, default={})
     status = models.CharField(
         max_length=9,
         choices=(
