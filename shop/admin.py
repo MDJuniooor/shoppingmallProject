@@ -13,4 +13,5 @@ class ItemAdmin(admin.ModelAdmin):
 
 @admin.register(models.order)
 class orderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['imp_uid', 'user', 'name', 'amount_html',
+                    'status_html', 'paid_at', 'receipt_link']
