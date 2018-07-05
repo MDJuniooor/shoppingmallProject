@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'shop',
+    'pytz',
+    'iamport',
+    'jsonfield',   
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,3 +130,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+IAMPORT_SHOP_ID = 'imp08202813'
+IAMPORT_API_KEY = '0485591399622644'
+IAMPORT_API_SECRET = 'd4c3YRZ2lQyVNIiJFXXYDmrIbEJswRMKVYOUPOWbEv7rdpbSm8QZuiIGXs9ujVeeU28KQ5VuA3WOs7HO'

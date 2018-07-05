@@ -10,3 +10,7 @@ class ItemAdmin(admin.ModelAdmin):
         if item.photo:
             return mark_safe('<img src = "{}" style="width: 75 px" />'.format(item.photo.url))
         return None
+
+@admin.register(models.order)
+class orderAdmin(admin.ModelAdmin):
+    pass

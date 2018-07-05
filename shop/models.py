@@ -1,7 +1,7 @@
 from uuid import uuid4 # create random uuid.
 from django.conf import settings
 from django.db import models
-
+from iamport import Iamport
 class Item(models.Model):
     name = models.CharField(max_length=100)
     desc = models.TextField(blank=True)
@@ -10,6 +10,8 @@ class Item(models.Model):
     is_public = models.BooleanField(default=False, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
 
 class order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -33,3 +35,18 @@ class order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
         ordering = ('-id',)
+
+    @property
+    def api(self):
+        'Iamport Client 인스턴스'
+        return Iamport(settings.IAMPORT_API_KEY, settings.IAMPORT_API_SECRET)
+
+    def update(self, commit=True, meta=None):
+        '결재내역 갱신'
+        if self.imp_uid:
+            self.meta = meta or self.api.find(imp_uid=self.imp_uid)
+            # merchant_uid는 반드시 매칭되어야 합니다.
+            assert str(self.merchant_uid) == self.meta['merchant_uid']
+            self.status = self.meta['status']
+        if commit:
+            self.save()

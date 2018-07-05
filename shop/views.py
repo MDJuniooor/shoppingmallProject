@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
-from .models import Item
-from .forms import OrderForm
+from .models import Item, order
+from .forms import PayForm
 
 class ItemListView(ListView):
     model = Item
@@ -19,25 +19,30 @@ class ItemListView(ListView):
         context = super().get_context_data(**kwargs)
         context['q'] = self.q
         return context
+
 index = ItemListView.as_view(model=Item, queryset=Item.objects.filter(is_public=True))
 
 
 @login_required
 def order_new(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    initial = {'name': item.name, 'amount': item.amount}
+    oorder = order.objects.create(user=request.user, item=item, name=item.name, amount=item.amount)
+    return redirect('shop:order_pay', item_id, str(oorder.merchant_uid))
+
+
+@login_required
+def order_pay(request, item_id, merchant_uid):
+    oorder = get_object_or_404(order, user=request.user,
+                            merchant_uid=merchant_uid, status='ready')
+    
     if request.method == 'POST':
-        form = OrderForm(request.POST, initial=initial)
+        form = PayForm(request.POST, instance=oorder)
         if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.item = item
-            order.save()
+            form.save()
             return redirect('accounts:profile')
     else:
-        form = OrderForm(initial=initial)
-        
-    return render(request, 'shop/order_form.html',{
+        form = PayForm(instance=oorder)
+
+    return render(request, 'shop/pay_form.html', {
         'form': form,
-        'iamport_shop_id': 'iamport',  # FIXME: 가맹점 식별코드
     })
