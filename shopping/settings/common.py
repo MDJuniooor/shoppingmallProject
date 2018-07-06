@@ -137,6 +137,6 @@ IAMPORT_API_KEY = '0485591399622644'
 IAMPORT_API_SECRET = 'd4c3YRZ2lQyVNIiJFXXYDmrIbEJswRMKVYOUPOWbEv7rdpbSm8QZuiIGXs9ujVeeU28KQ5VuA3WOs7HO'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'askdjango','static'),
+    os.path.join(BASE_DIR,'shopping','static'),
 ]
 
