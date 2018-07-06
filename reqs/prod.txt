@@ -1,0 +1,5 @@
+-r common.txt
+
+guicorn
+uwsgi
+psycopg2

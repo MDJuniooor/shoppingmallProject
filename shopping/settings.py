@@ -25,7 +25,7 @@ SECRET_KEY = 'z)ow9gw0^7+8&sn7g^0p0=004m)%1c6a74@w=(bxh4*jm+@fb='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False 
 
-ALLOWED_HOSTS = ['all']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -134,3 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 IAMPORT_SHOP_ID = 'imp08202813'
 IAMPORT_API_KEY = '0485591399622644'
 IAMPORT_API_SECRET = 'd4c3YRZ2lQyVNIiJFXXYDmrIbEJswRMKVYOUPOWbEv7rdpbSm8QZuiIGXs9ujVeeU28KQ5VuA3WOs7HO'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'askdjango','static'),
+]

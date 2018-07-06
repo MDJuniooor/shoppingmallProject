@@ -7,7 +7,7 @@ from .forms import PayForm
 class ItemListView(ListView):
     model = Item
     queryset = Item.objects.filter(is_public=True)
-
+    
     def get_queryset(self):
         self.q = self.request.GET.get('q','')
         qs = super().get_queryset()
