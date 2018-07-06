@@ -5,3 +5,6 @@ django-bootstrap3
 pillow
 pilkit
 django-imagekit
+pytz
+iamport-rest-client
+jsonfield
